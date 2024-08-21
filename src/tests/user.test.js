@@ -96,7 +96,7 @@ test("POST --> BASE_URL/LOGIN, should return statusCode 200, and res.body.user.e
 })
 
     // PUT (Update)
-test("PUT --> BASE_URL, should return statusCode 200, and res.body.user.firstName === userUpdate.firstName", async() => {
+test("PUT --> BASE_URL/userId, should return statusCode 200, and res.body.user.firstName === userUpdate.firstName", async() => {
     const userUpdate = {
         firstName: "Tester03",
         lastName: "Tester03",
@@ -120,4 +120,16 @@ test("PUT --> BASE_URL, should return statusCode 200, and res.body.user.firstNam
             expect(res.body[item]).toBeDefined()
             expect(res.body[item]).toBe(userUpdate[item])
         })
+})
+
+    // DELETE
+test("DELETE --> BASE_URL/userId, shoud return status 204", async() => {
+    const res = await request(app)
+        .delete(`${BASE_URL}/${userId}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+        
+        console.log(res.body)
+
+        expect(res.status).toBe(204)
+        expect(res.body).toBeDefined()
 })
