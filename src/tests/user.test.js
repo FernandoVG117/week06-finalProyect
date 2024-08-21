@@ -4,6 +4,7 @@ const app = require('../app');
 const BASE_URL = '/api/v1/users';
 let userId;
 let TOKEN;
+let TOKEN2;
 
 beforeAll(async() => {
     const user = {
@@ -27,6 +28,7 @@ const user = {
     phone: "1234567890"
 }
 
+    // POST (Create)
 test("POST --> BASE_URL, should return statusCode 201, and res.body.firstName === user.firstName", async() => {
 
     const columns = ["firstName", "lastName", "email", "phone"];
@@ -45,11 +47,12 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.firstName ==
             expect(res.body[column]).toBe(user[column]);
         })
 
-            // For the hashed password, onlye verify if been defined.
+            // For the hashedPassword, only verify if been defined.
         expect(res.body.password).toBeDefined()
 
 })
 
+    // GET (GetAll)
 test("GET --> BASE_URL, should return statusCode 200, and res.body.length === 2", async() => {
     const res = await request(app)
         .get(BASE_URL)
@@ -59,3 +62,35 @@ test("GET --> BASE_URL, should return statusCode 200, and res.body.length === 2"
         expect(res.body).toBeDefined()
         expect(res.body).toHaveLength(2)
 })
+
+    // POST (Login)
+test("POST --> BASE_URL/LOGIN, should return statusCode 200, and res.body.user.email === user.email", async() => {
+    const userLogin = {
+        email: user.email,
+        password: user.password
+    }
+
+    // console.log(userLogin)
+    
+    const res = await request(app)
+        .post(`${BASE_URL}/login`)
+        .send(userLogin)
+    
+        // console.log(res.body)
+        // TOKEN2 = res.body.token;
+        // console.log({TOKEN, TOKEN2})
+
+        expect(res.status).toBe(200)
+        expect(res.body).toBeDefined()
+        const userProps = ["email"];
+        userProps.forEach((item) => {
+            expect(res.body.user[item]).toBeDefined()
+            expect(res.body.user[item]).toBe(userLogin[item])
+        })
+
+        expect(res.body.user.password).toBeDefined()
+
+
+})
+
+// test("PUT --> BASE_URL, should return statusCode ")
