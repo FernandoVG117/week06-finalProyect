@@ -95,7 +95,7 @@ test("POST --> BASE_URL/LOGIN, should return statusCode 200, and res.body.user.e
 
 })
 
-    // test("PUT --> BASE_URL, should return statusCode ")
+    // PUT (Update)
 test("PUT --> BASE_URL, should return statusCode 200, and res.body.user.firstName === userUpdate.firstName", async() => {
     const userUpdate = {
         firstName: "Tester03",
