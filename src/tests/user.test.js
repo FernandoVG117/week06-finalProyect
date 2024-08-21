@@ -24,7 +24,7 @@ const user = {
     firstName: "Tester02",
     lastName: "Tester02",
     email: "test02@email.com",
-    password: "user1234",
+    password: "2user1234",
     phone: "1234567890"
 }
 
@@ -37,6 +37,8 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.firstName ==
         .post(`${BASE_URL}`)
         .send(user)    
 
+        userId = res.body.id;
+        // console.log(userId)
         // console.log(res.body)
 
         expect(res.statusCode).toBe(201);
@@ -93,4 +95,29 @@ test("POST --> BASE_URL/LOGIN, should return statusCode 200, and res.body.user.e
 
 })
 
-// test("PUT --> BASE_URL, should return statusCode ")
+    // test("PUT --> BASE_URL, should return statusCode ")
+test("PUT --> BASE_URL, should return statusCode 200, and res.body.user.firstName === userUpdate.firstName", async() => {
+    const userUpdate = {
+        firstName: "Tester03",
+        lastName: "Tester03",
+        // email: "test03@email.com",
+        // password: "3user1234",
+        // phone: "1234567890"
+    }
+
+    const res = await request(app)
+        .put(`${BASE_URL}/${userId}`)
+        .send(userUpdate)
+        .set('Authorization', `Bearer ${TOKEN}`)
+
+        // console.log(res.body)
+
+        expect(res.status).toBe(200)
+        expect(res.body).toBeDefined()
+
+        const columns = ['firstName', 'lastName'];
+        columns.forEach((item) => {
+            expect(res.body[item]).toBeDefined()
+            expect(res.body[item]).toBe(userUpdate[item])
+        })
+})
