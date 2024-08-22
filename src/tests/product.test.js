@@ -96,3 +96,12 @@ test("PUT --> BASE_URL/:id, should return statusCode 200, and res.body.title ===
             expect(res.body[column]).toBe(productUpdate[column])
         })
 })
+
+    //DELETE 🔐
+test("DELETE --> BASE_URL/:id, should return statusCode 204", async() => {
+    const res = await request(app)
+        .delete(`${BASE_URL}/${productId}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+
+        expect(res.statusCode).toBe(204)
+})
