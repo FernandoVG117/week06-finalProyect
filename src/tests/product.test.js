@@ -43,3 +43,15 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.title === pr
             expect(res.body[column]).toBe(product[column])
         })
 })
+
+    // GET (GetAll)
+    test("GET --> BASE_URL, should return statusCode 200 and res.body.length === 1", async() => {
+        const res = await request(app)
+            .get(BASE_URL)
+    
+            console.log(res.body)
+    
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toBeDefined()
+            expect(res.body).toHaveLength(1)
+    })
