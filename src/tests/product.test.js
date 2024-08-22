@@ -73,3 +73,26 @@ test("GET --> BASE_URL/:id, should return statusCode 200, and res.body.title ===
             expect(res.body[column]).toBe(product[column])
         })
 })
+
+    // PUT (Update) 🔐
+test("PUT --> BASE_URL/:id, should return statusCode 200, and res.body.title === productUpdate.title", async() => {
+    const productUpdate = {
+        title: "Dark Souls",
+        description: "Dark Souls is a dark fantasy action role-playing game series developed by FromSoftware and published by Bandai Namco Entertainment. Created by Hidetaka Miyazaki, the series began with the release of Dark Souls (2011) and has seen two sequels, Dark Souls II (2014) and Dark Souls III (2016). ",
+        price: 1500,
+    }
+    const res = await request(app)
+        .put(`${BASE_URL}/${productId}`)
+        .send(productUpdate)
+        .set('Authorization', `Bearer ${TOKEN}`)
+
+        // console.log(res.body)
+
+        expect(res.statusCode).toBe(200)
+        expect(res.body).toBeDefined()
+        const columns = ['title', 'description', 'price'];
+        columns.forEach((column)=>{
+            expect(res.body[column]).toBeDefined()
+            expect(res.body[column]).toBe(productUpdate[column])
+        })
+})
