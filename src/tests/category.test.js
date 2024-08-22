@@ -52,3 +52,12 @@ test("GET --> BASE_URL, should return statusCode 200, and res.body.length === 1"
         expect(res.body).toBeDefined()
         expect(res.body).toHaveLength(1)
 })
+
+    // DELETE 🔐
+test("DELETE --> BASE_URL, should return status 204", async() => {
+    const res = await request(app)
+        .delete(`${BASE_URL}/${categoryId}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+
+        expect(res.statusCode).toBe(204)
+})
