@@ -146,7 +146,7 @@ test("DELETE --> BASE_URL/userId, shoud return status 204", async() => {
         .delete(`${BASE_URL}/${userId}`)
         .set('Authorization', `Bearer ${TOKEN}`)
         
-        console.log(res.body)
+        // console.log(res.body)
 
         expect(res.status).toBe(204)
         expect(res.body).toBeDefined()
