@@ -49,7 +49,7 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.title === pr
         const res = await request(app)
             .get(BASE_URL)
     
-            console.log(res.body)
+            // console.log(res.body)
     
             expect(res.statusCode).toBe(200)
             expect(res.body).toBeDefined()
