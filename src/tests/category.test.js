@@ -25,7 +25,7 @@ beforeAll(async() => {
         // console.log(TOKEN)
 })
 
-    // POST (create)
+    // POST (create) 🔐
 test("POST --> BASE_URL, should return statusCode 201, and res.body.name === category.name", async() => {
     const res = await request(app)
         .post(BASE_URL)
@@ -39,4 +39,16 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.name === cat
         expect(res.body).toBeDefined()
         expect(res.body.name).toBeDefined()
         expect(res.body.name).toBe(category.name)
+})
+
+    // GET (GetAll)
+test("GET --> BASE_URL, should return statusCode 200, and res.body.length === 1", async() => {
+    const res = await request(app)
+        .get(BASE_URL)
+
+        // console.log(res.body)
+
+        expect(res.statusCode).toBe(200)
+        expect(res.body).toBeDefined()
+        expect(res.body).toHaveLength(1)
 })
