@@ -84,15 +84,33 @@ test("POST --> BASE_URL/LOGIN, should return statusCode 200, and res.body.user.e
 
         expect(res.status).toBe(200)
         expect(res.body).toBeDefined()
-        const userProps = ["email"];
-        userProps.forEach((item) => {
-            expect(res.body.user[item]).toBeDefined()
-            expect(res.body.user[item]).toBe(userLogin[item])
-        })
-
+        expect(res.body.user).toBeDefined()
+        expect(res.body.token).toBeDefined()
+        expect(res.body.user.email).toBeDefined()
+        expect(res.body.user.email).toBe(userLogin.email)
         expect(res.body.user.password).toBeDefined()
 
+})
 
+    //  POST (Login error)
+test("POST --> BASE_URL/LOGIN, should return statusCode 401", async() => {
+    const userLogin = {
+        email: user.email,
+        password:"invalid credentials"
+    }
+
+    // console.log(userLogin)
+    
+    const res = await request(app)
+        .post(`${BASE_URL}/login`)
+        .send(userLogin)
+    
+        // console.log(res.body)
+        // TOKEN2 = res.body.token;
+        // console.log({TOKEN, TOKEN2})
+
+        expect(res.status).toBe(401)
+            
 })
 
     // PUT (Update)
