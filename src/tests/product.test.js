@@ -1,5 +1,7 @@
+require('../models')
 const request = require('supertest');
 const app = require('../app');
+const Category = require('../models/Category');
 
 beforeAll(async() => {
     const BASE_URL2 = '/api/v1/users';
@@ -14,6 +16,11 @@ beforeAll(async() => {
         TOKEN = res.body.token;
 
         // console.log(TOKEN)
+
+        await Category.create({
+            id: 1,
+            name: "videogames",
+        })
 })
 
 let TOKEN;
@@ -24,6 +31,7 @@ const  product = {
     title: "Stellar Blade",
     description: "The future of humanity is at stake in Stellar Blade, a new action-adventure story for PlayStation®5. Earth has been abandoned, ravaged by powerful and strange creatures, and the remnants of the decimated human race have escaped to a colony in outer space. From the Colony, EVE, a member of the VII Air Squadron, arrives on our desolate planet with a mission: save humanity and take back Earth from the clutches of the Naytibas, the malevolent force that has laid waste to everything. However, as EVE solves the mysteries of the past in the ruins of human civilization and defeats the Naytibas one by one, she realizes that her mission is not as simple as she thought. In fact, nothing will be as easy as it seems…",
     price: 1600,
+    categoryId: 1
 }
 
     // POST (Create) 🔐
@@ -39,7 +47,7 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.title === pr
 
         expect(res.statusCode).toBe(201)
         expect(res.body).toBeDefined()
-        const columns = ['title', 'description', 'price'];
+        const columns = ['title', 'description', 'price', 'categoryId'];
         columns.forEach((column)=>{
             expect(res.body[column]).toBeDefined()
             expect(res.body[column]).toBe(product[column])
@@ -67,7 +75,7 @@ test("GET --> BASE_URL/:id, should return statusCode 200, and res.body.title ===
 
         expect(res.statusCode).toBe(200)
         expect(res.body).toBeDefined()
-        const columns = ['title', 'description', 'price'];
+        const columns = ['title', 'description', 'price', "categoryId"];
         columns.forEach((column)=>{
             expect(res.body[column]).toBeDefined()
             expect(res.body[column]).toBe(product[column])
@@ -80,6 +88,7 @@ test("PUT --> BASE_URL/:id, should return statusCode 200, and res.body.title ===
         title: "Dark Souls",
         description: "Dark Souls is a dark fantasy action role-playing game series developed by FromSoftware and published by Bandai Namco Entertainment. Created by Hidetaka Miyazaki, the series began with the release of Dark Souls (2011) and has seen two sequels, Dark Souls II (2014) and Dark Souls III (2016). ",
         price: 1500,
+        categoryId: 1
     }
     const res = await request(app)
         .put(`${BASE_URL}/${productId}`)
@@ -90,7 +99,7 @@ test("PUT --> BASE_URL/:id, should return statusCode 200, and res.body.title ===
 
         expect(res.statusCode).toBe(200)
         expect(res.body).toBeDefined()
-        const columns = ['title', 'description', 'price'];
+        const columns = ['title', 'description', 'price', "categoryId"];
         columns.forEach((column)=>{
             expect(res.body[column]).toBeDefined()
             expect(res.body[column]).toBe(productUpdate[column])
