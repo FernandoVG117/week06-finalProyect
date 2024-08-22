@@ -36,4 +36,10 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.title === pr
         // console.log(res.body)
 
         expect(res.statusCode).toBe(201)
+        expect(res.body).toBeDefined()
+        const columns = ['title', 'description', 'price'];
+        columns.forEach((column)=>{
+            expect(res.body[column]).toBeDefined()
+            expect(res.body[column]).toBe(product[column])
+        })
 })
