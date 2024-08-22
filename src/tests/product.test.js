@@ -31,9 +31,11 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.title === pr
     const res = await request(app)
         .post(BASE_URL)
         .send(product)
-        .set('Authorization', `Baerer ${TOKEN}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
 
         // console.log(res.body)
+        productId = res.body.id;
+        // console.log(productId)
 
         expect(res.statusCode).toBe(201)
         expect(res.body).toBeDefined()
@@ -45,13 +47,29 @@ test("POST --> BASE_URL, should return statusCode 201, and res.body.title === pr
 })
 
     // GET (GetAll)
-    test("GET --> BASE_URL, should return statusCode 200 and res.body.length === 1", async() => {
-        const res = await request(app)
-            .get(BASE_URL)
-    
-            // console.log(res.body)
-    
-            expect(res.statusCode).toBe(200)
-            expect(res.body).toBeDefined()
-            expect(res.body).toHaveLength(1)
-    })
+test("GET --> BASE_URL, should return statusCode 200 and res.body.length === 1", async() => {
+    const res = await request(app)
+        .get(BASE_URL)
+
+        // console.log(res.body)
+
+        expect(res.statusCode).toBe(200)
+        expect(res.body).toBeDefined()
+        expect(res.body).toHaveLength(1)
+})
+
+    // GET (GetOne)
+test("GET --> BASE_URL/:id, should return statusCode 200, and res.body.title === product.title", async() => {
+    const res = await request(app)
+        .get(`${BASE_URL}/${productId}`)
+
+        // console.log(res.body)
+
+        expect(res.statusCode).toBe(200)
+        expect(res.body).toBeDefined()
+        const columns = ['title', 'description', 'price'];
+        columns.forEach((column)=>{
+            expect(res.body[column]).toBeDefined()
+            expect(res.body[column]).toBe(product[column])
+        })
+})
