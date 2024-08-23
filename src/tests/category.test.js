@@ -6,18 +6,18 @@ let TOKEN;
 let categoryId;
 
 const BASE_URL = '/api/v1/categories';
+const BASE_URL_LOGIN = '/api/v1/users/login';
 const category = {
     name: "Videogames",
 }
 
 beforeAll(async() => {
-    const BASE_URL2 = '/api/v1/users';
     const user = {
         email: "test@email.com",
         password: "user1234",
     };
     const res = await request(app)
-        .post(`${BASE_URL2}/login`)
+        .post(BASE_URL_LOGIN)
         .send(user)
 
         TOKEN = res.body.token;
