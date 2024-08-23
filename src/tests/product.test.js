@@ -3,38 +3,47 @@ const request = require('supertest');
 const app = require('../app');
 const Category = require('../models/Category');
 
+let TOKEN;
+let productId;
+let category;
+let product;
+
+const BASE_URL_LOGIN = '/api/v1/users/login';
+const BASE_URL = '/api/v1/products';
+
+
 beforeAll(async() => {
-    const BASE_URL2 = '/api/v1/users';
     const user = {
         email: "test@email.com",
         password: "user1234",
     };
     const res = await request(app)
-        .post(`${BASE_URL2}/login`)
+        .post(BASE_URL_LOGIN)
         .send(user)
 
         TOKEN = res.body.token;
-
         // console.log(TOKEN)
 
-        await Category.create({
-            id: 1,
-            name: "videogames",
+        category = await Category.create({
+            name: "laudry"
         })
+        // console.log(category)
+
+        product = {
+            title: "Stellar Blade",
+            description: "The future of humanity is at stake in Stellar Blade, a new action-adventure story for PlayStation®5. Earth has been abandoned, ravaged by powerful and strange creatures, and the remnants of the decimated human race have escaped to a colony in outer space. From the Colony, EVE, a member of the VII Air Squadron, arrives on our desolate planet with a mission: save humanity and take back Earth from the clutches of the Naytibas, the malevolent force that has laid waste to everything. However, as EVE solves the mysteries of the past in the ruins of human civilization and defeats the Naytibas one by one, she realizes that her mission is not as simple as she thought. In fact, nothing will be as easy as it seems…",
+            price: 1600,
+            categoryId: category.id
+        }
+        // console.log(product)
 })
 
-let TOKEN;
-let productId;
+afterAll((async () => {
+    await category.destroy()
+}))
 
-const BASE_URL = '/api/v1/products';
-const  product = {
-    title: "Stellar Blade",
-    description: "The future of humanity is at stake in Stellar Blade, a new action-adventure story for PlayStation®5. Earth has been abandoned, ravaged by powerful and strange creatures, and the remnants of the decimated human race have escaped to a colony in outer space. From the Colony, EVE, a member of the VII Air Squadron, arrives on our desolate planet with a mission: save humanity and take back Earth from the clutches of the Naytibas, the malevolent force that has laid waste to everything. However, as EVE solves the mysteries of the past in the ruins of human civilization and defeats the Naytibas one by one, she realizes that her mission is not as simple as she thought. In fact, nothing will be as easy as it seems…",
-    price: 1600,
-    categoryId: 1
-}
 
-    // POST (Create) 🔐
+// POST (Create) 🔐
 test("POST --> BASE_URL, should return statusCode 201, and res.body.title === product.title", async() => {
     const res = await request(app)
         .post(BASE_URL)
@@ -64,6 +73,9 @@ test("GET --> BASE_URL, should return statusCode 200 and res.body.length === 1",
         expect(res.statusCode).toBe(200)
         expect(res.body).toBeDefined()
         expect(res.body).toHaveLength(1)
+
+        expect(res.body[0].category.id).toBeDefined()
+        expect(res.body[0].category.id).toBe(category.id)
 })
 
     // GET (GetOne)
@@ -80,6 +92,8 @@ test("GET --> BASE_URL/:id, should return statusCode 200, and res.body.title ===
             expect(res.body[column]).toBeDefined()
             expect(res.body[column]).toBe(product[column])
         })
+        expect(res.body.category.id).toBeDefined()
+        expect(res.body.category.id).toBe(category.id)
 })
 
     // PUT (Update) 🔐
