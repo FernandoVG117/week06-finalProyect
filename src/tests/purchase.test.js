@@ -52,7 +52,7 @@ afterAll(async() => {
 })
 
     // POST/GET --> Create
-test("POST --> BASE_URL, should return statusCode 201 and ", async() => {
+test("POST --> BASE_URL, should return statusCode 201 and res.body[0].userId === cart.userId", async() => {
     cart = await Cart.create({
         userId: userId,
         productId: productId,
@@ -66,6 +66,23 @@ test("POST --> BASE_URL, should return statusCode 201 and ", async() => {
         // console.log(res.body)
 
         expect(res.statusCode).toBe(201)
+        expect(res.body).toBeDefined()
+        expect(res.body).toHaveLength(1)
+        const columns = ['userId', 'productId', 'quantity'];
+        columns.forEach((column)=>{
+            expect(res.body[0][column]).toBe(cart[column])
+        })
+})
+
+    // GET --> GetAll
+test("GET --> BASE_URL. should return statusCode 200, and res.body.length === 1", async() => {
+    const res = await request(app)
+        .get(BASE_URL)
+        .set('Authorization', `Bearer ${TOKEN}`)
+
+        // console.log(res.body)
+
+        expect(res.statusCode).toBe(200)
         expect(res.body).toBeDefined()
         expect(res.body).toHaveLength(1)
         const columns = ['userId', 'productId', 'quantity'];
