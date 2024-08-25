@@ -86,3 +86,18 @@ test("GET --> BASE_URL, should return statusCode 200 and res.body.length === 1",
     expect(res.body[0].product.id).toBe(product.id);
     expect(res.body[0].product.categoryId).toBe(category.id);
 });
+
+    // GET --> GetOne
+    test("GET --> BASE_URL/:id, should return statusCode 200, and res.body.productId === product.id", async () => {
+        const res = await request(app)
+            .get(`${BASE_URL}/${cartItemId}`)
+            .set('Authorization', `Bearer ${TOKEN}`);
+
+            // console.log(res.body)
+    
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toBeDefined();
+    expect(res.body.id).toBe(cartItemId);
+    expect(res.body.productId).toBe(product.id);
+    expect(res.body.product.categoryId).toBe(category.id);
+});
