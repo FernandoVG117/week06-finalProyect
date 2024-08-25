@@ -70,3 +70,19 @@ test("POST --> BASE_URL, should return statusCode 201 and res.body.productId ===
     expect(res.body.quantity).toBe(cartItem.quantity)
     expect(res.body.userId).toBe(userId)
 });
+
+    // GET --> GetAll
+test("GET --> BASE_URL, should return statusCode 200 and res.body.length === 1", async () => {
+    const res = await request(app)
+        .get(BASE_URL)
+        .set('Authorization', `Bearer ${TOKEN}`);
+
+        // console.log(res.body)
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toBeDefined();
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].product).toBeDefined();
+    expect(res.body[0].product.id).toBe(product.id);
+    expect(res.body[0].product.categoryId).toBe(category.id);
+});
