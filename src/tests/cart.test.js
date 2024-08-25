@@ -111,7 +111,20 @@ test("PUT --> BASE_URL/:id, should return statusCode 200, and res.body.quantity 
         .send({ quantity: quantityUpdate })
         .set('Authorization', `Bearer ${TOKEN}`);
 
+        // console.log(res.body)
+
     expect(res.statusCode).toBe(200);
     expect(res.body).toBeDefined();
     expect(res.body.quantity).toBe(quantityUpdate);
+});
+
+    // DELETE
+test("DELETE --> BASE_URL/:id, should return statusCode 204", async () => {
+    const res = await request(app)
+        .delete(`${BASE_URL}/${cartItemId}`)
+        .set('Authorization', `Bearer ${TOKEN}`);
+
+        // console.log(res.body)
+
+    expect(res.statusCode).toBe(204);
 });

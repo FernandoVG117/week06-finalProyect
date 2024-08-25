@@ -55,9 +55,9 @@ const getOne = catchError(async (req, res) => {
 
 const remove = catchError(async(req, res) => {
     const userId = req.user.id;
-    const { productId } = req.params;
+    const { id } = req.params;
 
-    const result = await Cart.destroy({ where: {productId, userId} });
+    const result = await Cart.destroy({ where: {id, userId} });
     if(!result) return res.sendStatus(404);
     return res.sendStatus(204);
 });
