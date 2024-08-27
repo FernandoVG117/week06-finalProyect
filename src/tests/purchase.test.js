@@ -48,7 +48,7 @@ beforeAll(async()=>{
 afterAll(async() => {
     await Category.destroy({where: {id: category.id}});
     await Product.destroy({where: {id: productId}})
-    await Cart.destroy({where: {userId}});
+    // await Cart.destroy({where: {userId}});
 })
 
     // POST/GET --> Create
